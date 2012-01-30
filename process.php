@@ -50,6 +50,7 @@ $id = $_SESSION['k_UserId'];
     $errors = array();
  
     try {
+		echo array_key_exists('image', $_FILES);
         if (!array_key_exists('image', $_FILES)) {
             throw new Exception('Image not found in uploaded data');
         }

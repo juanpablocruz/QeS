@@ -95,6 +95,18 @@ if (isset($_SESSION['k_username'])) {
 				
 			});	
 		</script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#NewEventButton").click(function(){
+				  $(".CF").slideToggle("slow");
+					$(this).toggleClass("active");
+				});
+				
+			});
+			 $(document).ready(function() {
+				$("#accordion").accordion();
+			  });	
+		</script>
 	</head>
 
 	<body>
@@ -190,7 +202,7 @@ if (isset($_SESSION['k_username'])) {
 		
 		<div class="image drag"><?php echo"<img src='view.php?id=$id'>" ?></div>
 		<div id="imgload">
-			<div id="load_img" >
+			<div id="load_img">
 			<form method="post" action="process.php" enctype="multipart/form-data">
 				<input type="file" name="upload" />
 				<input type="submit" value="Upload Image" />
@@ -291,6 +303,31 @@ if (isset($_SESSION['k_username'])) {
 	</div>
 	<div id="tabs-4" class="Page">
 	<p>Eventos</p>
+	<div>
+	<button id="NewEventButton">Crear Evento</button>
+	</div>
+	<div id="CreationForm" class="CF">
+		<header style="padding-left:40%;">New Event
+		</header>
+			<div id="EventInfo">
+				<textarea id="textarea" rows="1" cols="1" placeholder="Description"></textarea>
+			</div>
+		<div id="CreationGroups">
+			Groups:
+			<?php
+					$result = mysql_query($qr);		
+				echo "<ul id='GroupList' style='list-style:none;'>";
+				$i=0;
+				$len = mysql_num_fields($result);
+				while ($i<$len){
+					$grup= mysql_field_name($result,$i);
+					if ($grup!='Sigo'){
+						echo "<li><div class='MiembroGrupo'>".$grup."</div></li>";}
+					$i++;
+				}
+				echo "</ul></div>";
+			?>
+		</div>
 	</div>
 </div>
 	</body>
