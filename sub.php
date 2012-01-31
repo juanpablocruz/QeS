@@ -1,25 +1,17 @@
 <?php
-
+include_once "connect.php";
 $name = $_POST['name'];
 $email = $_POST['email'];
 $pass = has($_POST['password']);
 $movil = $_POST['movil'];
 $hoy = date("Y-m-d");
-/* --------------------SERVER INFO------------------------*/
-$user="root";
-$host="localhost";
-$password="";
-/* --------------------SERVER CONNECTION------------------*/
+
 if( empty($_POST['name'])||empty($_POST['email'])||empty($_POST['password']))
 {
 echo "Esta vacio";
 }
 else{
-$database = "qes";
-$connection = mysql_connect($host,$user,$password)
-	or die ("couldn’t connect to server");
-$db = mysql_select_db($database,$connection)
-	or die ("Couldn’t select database");
+
 $chck = "SELECT `loginName` FROM `member` WHERE `loginName`='$name'";
 $checkres = mysql_query($chck)
 	or die (mysql_error());

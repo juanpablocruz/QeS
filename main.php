@@ -7,15 +7,8 @@ if (isset($_SESSION['k_username'])) {
 			 location.href = 'index.html';
 			 </script>";
 		}
-		$user="root";
-		$host="localhost";
-		$password="";
+		include_once "connect.php";
 		$tabla = "tabla".$_SESSION['k_UserId'];
-		$connection = mysql_connect($host,$user,$password)
-			or die ("couldn’t connect to server");
-		$database = "qes";
-		$db = mysql_select_db($database,$connection)
-			or die ("Couldn’t select database");
 		$id = $_SESSION['k_UserId'];
 		$query = mysql_query("SELECT * FROM member WHERE UserId = '$id'");
 		$firstrow = mysql_fetch_array($query);
@@ -59,15 +52,18 @@ if (isset($_SESSION['k_username'])) {
 					$('#canceleditprof').css('visibility','hidden');					
 				});
 				}
-
-			
 			$(function() {
-				$( ".calendar" ).datepicker({
-					 onSelect: function(dateText, inst) {
-						alert(dateText);
-					 }
-					});
+				$(".calendar").datepicker({dateFormat: 'yy/mm/dd'});
 			});
+			$(function() {
+				$( "#calendar" ).datepicker({
+				onSelect: function(dateText, inst) {
+						alert(dateText);
+						}
+					 }
+					);
+			});
+			
 			$(function() {
 				$( ".drag" ).draggable();
 			});
@@ -94,6 +90,79 @@ if (isset($_SESSION['k_username'])) {
 				});
 				
 			});	
+		</script>
+		<script type="text/javascript">
+			function canceleEvent(){	
+				$("#cancelEvent").click(function(){
+					$('#CreationForm').css('visibility','hidden');	
+					$('#cancelEvent').css('visibility','hidden');
+					$("#NewEventButton").css("visibility","visible");					
+				});
+				}
+			function sethora(){
+				var now = new Date();
+				var hora = now.getHours();
+				var minute  = now.getMinutes();
+				if (minute<"10"){
+					minute = "00";
+				}
+				else{
+					minute = minute-(minute%10);
+				}
+				var ele = document.getElementById("EventHora");
+				ele.value = hora+":"+minute;
+			};
+			function loadhora(){
+				$('#horas').css('visibility','visible');
+				var now = new Date();
+				var hora = now.getHours();
+				var cuadrohoras = document.getElementById("horas");
+				var i = 0;
+				while (hora+i < 24){
+					cuadrohoras.innerHTML += "<a href=javascript:void(0);>"+(hora+i)+":00</a><br>";
+					i++;
+				}
+			
+			}
+			$(document).ready(function(){
+				$("#NewEventButton").click(function(){
+				  $(".CF").slideToggle("slow");
+					$(this).toggleClass("active");
+					$("#NewEventButton").css("visibility","hidden");
+					$('#cancelEvent').css('visibility','visible');
+					sethora();
+				});
+			});
+			 $(function() {
+				$( "#GroupList" ).selectable({
+					selected: function(event, ui) { 
+						var grupo = (ui.selected.innerHTML);
+						grupo = grupo.replace(/<.*?>/g,'');
+						window.groupto = grupo;
+					}
+				});
+				$("#horas").selectable({
+					selected: function(event, ui) { 
+						var cuadrohoras = document.getElementById("EventHora");
+						cuadrohoras.value = (ui.selected.text);
+						$('#horas').css('visibility','hidden');
+					}
+				});
+			});
+			function createevent(){
+					var hora = document.getElementById("EventHora").value;
+					var dia = document.getElementById("EventDay").value;
+					var inputh = document.getElementById("inputhora");
+					inputh.setAttribute("name", "hora");
+					inputh.setAttribute("value", hora);
+					var inputd = document.getElementById("inputdia");
+					inputd.setAttribute("name", "dia");
+					inputd.setAttribute("value", dia);
+					var inputg = document.getElementById("inputgrupo");
+					inputg.setAttribute("name", "grupo");
+					inputg.setAttribute("value", groupto);
+					document.getElementById("FormularioEvento").submit();
+				};
 		</script>
 	</head>
 
@@ -174,14 +243,14 @@ if (isset($_SESSION['k_username'])) {
 				<div style="clear: both;"></div>
 			</div>
 			
-		<div id="calendar" class="calendar drag"></div>
+		<div id="calendar" class="drag" style="float:right;"></div>
 		</div>
 		<div style="clear: both;"></div>
 	</div>
 	<div id="tabs-2" class="Page">
 		<p>Perfil</p>
 		<div id="even" class= "drag">
-			<p id="canceleditprof" style="float:right" onClick=canceleditprof()>X</p>
+			<p id="canceleditprof" class="cancel" style="float:right" onClick=canceleditprof()>X</p>
 			<p>Nombre:<?php echo "<input name=perfilname id='perfil_val' class=perfil_val type=text readonly value='".$_SESSION['k_username']."' style='border:none'>";?></p>
 			<p>Numero movil:<?php echo "<input name=perfilnumber class=perfil_val type=text readonly value=".$_SESSION['k_phone']." style='border:none'>";?></p>
 			<p>email:<?php echo "<input name=perfilemail class=perfil_val type=text readonly value=".$_SESSION['k_email']." style='border:none'>";?></p>
@@ -190,7 +259,7 @@ if (isset($_SESSION['k_username'])) {
 		
 		<div class="image drag"><?php echo"<img src='view.php?id=$id'>" ?></div>
 		<div id="imgload">
-			<div id="load_img" >
+			<div id="load_img">
 			<form method="post" action="process.php" enctype="multipart/form-data">
 				<input type="file" name="image" />
 				<input type="submit" value="Upload Image" />
@@ -291,7 +360,59 @@ if (isset($_SESSION['k_username'])) {
 	</div>
 	<div id="tabs-4" class="Page">
 	<p>Eventos</p>
+	<div>
+		<button id="NewEventButton">Crear Evento</button>
 	</div>
-</div>
+		<div id="CreationForm" class="CF" onload="sethora()">
+			<form method=post action=newevent.php id="FormularioEvento">
+				<p id="cancelEvent" class="cancel" style="float:right" onClick=canceleEvent()>X</p>
+				
+				<header style="padding-left:40%;">New Event</header>
+				
+				<div id="DateEvent"><input type="text" class="calendar drag" id="EventDay" placeholder="Date" name="date"/>
+				
+				<span id="Hour"><input type="text" class="inline drag" tabindex="3" name="time" id="EventHora" onclick="loadhora()"></div></span>
+				<div id="horas"></div>
+				<div id="EventInfo" name="EventDescription" class="drag">
+					<textarea id="textarea" rows="1" cols="1" placeholder="Description" class="drag" name="evntDescript"></textarea>
+				</div>
+				<div id="CreationGroups" name="GroupList" class="drag">
+					Groups:
+					<?php
+						$result = mysql_query($qr);		
+						echo "<ul id='GroupList' style='list-style:none;'>";
+						$i=0;
+						$len = mysql_num_fields($result);
+						while ($i<$len){
+							$grup= mysql_field_name($result,$i);
+							if ($grup!='Sigo'){
+								echo "<li><div class='MiembroGrupo'>".$grup."</div></li>";}
+							$i++;
+						}
+						echo "</ul>";
+					?>
+				</div>
+				<div style="clear: both;"></div>
+				<div>
+					<input type=hidden id="inputdia"/>
+					<input type=hidden id="inputhora"/>
+					<input type=hidden id="inputgrupo"/>
+				</div>
+			</form>
+			<button type="submit" id="SubmitEvent" class="drag" onClick="createevent()">Create Event</button>
+		</div>
+	<div id="ListaEventos">
+		<?php
+		$query = mysql_query("SELECT * FROM eventos WHERE UserId = '$id'");
+		$lista = mysql_fetch_array($query);
+		$idcreator = $lista['UserId'];
+		$query = mysql_query("SELECT * FROM member WHERE UserId = '$idcreator'");
+		$user= mysql_fetch_array($query);
+		echo "<div id='evento' class='evento drag'><p>Creador: ".$user['loginName']."<br>    Grupo: ".$lista['event_group']." Fecha: ".$lista['event_date_expire']."<br><p>Descripcion:<br>".$lista['event_text']."</p></p></div>";
+		
+		
+		?>
+	</div>
+	</div>
 	</body>
 </html>
