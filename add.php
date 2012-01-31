@@ -5,9 +5,9 @@ $password="";
 $database="qes";
 $tabla = "tabla".$_SESSION['k_UserId'];
 		$connection = mysql_connect($host,$user,$password)
-			or die ("couldn’t connect to server");
+			or die ("couldnï¿½t connect to server");
 		$db = mysql_select_db($database,$connection)
-			or die ("Couldn’t select database");
+			or die ("Couldnï¿½t select database");
 		$id = $_GET['id'];
 		$id = preg_replace("/[^a-zA-Z0-9]/", "", $id);
 		$mid = $_SESSION['k_UserId'];
@@ -16,10 +16,10 @@ $tabla = "tabla".$_SESSION['k_UserId'];
 		$checkrow = mysql_fetch_row($check1);
 		if($checkrow[0] != $id){
 				$qry = mysql_query("INSERT INTO $tabla (sigo)
-									VALUES ($id)";)
+									VALUES ($id)");
 				$grupo = preg_replace("/[^a-zA-Z0-9]/", "", $_GET['group']);
 				$seguir = mysql_query("INSERT INTO $tablasuya ($grupo)
-							VALUES ($mid)";)
+							VALUES ($mid)");
 				echo
 					"<SCRIPT LANGUAGE='javascript'>
 					 location.href = 'main.php';
