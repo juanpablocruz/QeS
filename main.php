@@ -403,13 +403,23 @@ if (isset($_SESSION['k_username'])) {
 		</div>
 	<div id="ListaEventos">
 		<?php
-		$query = mysql_query("SELECT * FROM eventos WHERE UserId = '$id'");
-		$lista = mysql_fetch_array($query);
-		$idcreator = $lista['UserId'];
-		$query = mysql_query("SELECT * FROM member WHERE UserId = '$idcreator'");
-		$user= mysql_fetch_array($query);
-		echo "<div id='evento' class='evento drag'><p>Creador: ".$user['loginName']."<br>    Grupo: ".$lista['event_group']." Fecha: ".$lista['event_date_expire']."<br><p>Descripcion:<br>".$lista['event_text']."</p></p></div>";
-		
+		$sigo = mysql_query("SELECT sigo FROM $tabla");
+		$len = mysql_num_fields($sigo);
+		$i = 0;
+		while($i<=$len){
+			$seguido = mysql_fetch_row($sigo);
+			if($seguido[0]!=0){
+				$query = mysql_query("SELECT * FROM eventos WHERE UserId = '$seguido[0]'");
+				$lista = mysql_fetch_array($query);
+				$idcreator = $lista['UserId'];
+				$query = mysql_query("SELECT * FROM member WHERE UserId = '$idcreator'");
+				$user= mysql_fetch_array($query);
+				if ($lista['UserId'] !=0){
+					echo "<div id='evento' class='evento drag'><p>Creador: ".$user['loginName']."<br>    Grupo: ".$lista['event_group']." Fecha: ".$lista['event_date_expire']."<br><p>Descripcion:<br>".$lista['event_text']."</p></p></div>";
+				}
+			}
+			$i++;
+		}
 		
 		?>
 	</div>
