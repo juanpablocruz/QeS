@@ -188,7 +188,7 @@ if (isset($_SESSION['k_username'])) {
 	<div id="tabs-1" class="Page">
 		<div id="evento" class="drag">
 			Hoy...<br>
-			Ma�ana...<br>
+			Mañana...<br>
 			Pasado...<br>
 			<a href="logout.php">Logout</a><br>
 		</div>
@@ -280,37 +280,41 @@ if (isset($_SESSION['k_username'])) {
 		$len = mysql_num_fields($result);
 		while ($i<$len){
 			$grup= mysql_field_name($result,$i);
-			if ($grup!='Sigo'){
-				echo "
-					<div class='grupo drag sigo'>
-					<div class='group'><a href='deletegroup.php?name=$grup'>x</a><br>".$grup."</div>";
-			}
-			else{
-				echo "
-					<div class='grupo drag';'>
-					<div class='group'><br>".$grup."</div>";
-			}
-			$qry = mysql_query("SELECT $grup FROM $tabla");
-			while ($row = mysql_fetch_row($qry)){
-				if ($grup == 'Sigo'){
-					if ($row[0] != 0 && $row[0] != $_SESSION['k_UserId']){
-						$selectname = mysql_query("SELECT loginName FROM member WHERE UserId = $row[0]");
-						$name = mysql_fetch_row($selectname);
-						echo "
-							<div class='drag friends'>".$name[0]."<a href=stop.php?id=$row[0]&grupo=$grup>x</a>
-							</div>";
-					}
+			if($grup!='eventos'){
+				if ($grup!='Sigo'&&($grup != 'eventos')){
+					echo "
+						<div class='grupo drag sigo'>
+						<div class='group'><a href='deletegroup.php?name=$grup'>x</a><br>".$grup."</div>";
 				}
-				else{
-					if ($row[0] != 0 && $row[0] != $_SESSION['k_UserId']){
-						$selectname = mysql_query("SELECT loginName FROM member WHERE UserId = $row[0]");
-						$name = mysql_fetch_row($selectname);
+				if ($grup == 'Sigo')
+					{
 						echo "
-							<div class='drag friends'>".$name[0]."</div>";		
-					}
+							<div class='grupo drag';'>
+							<div class='group'><br>".$grup."</div>";
+					
 				}
+				$qry = mysql_query("SELECT $grup FROM $tabla");
+				while ($row = mysql_fetch_row($qry)){
+					if ($grup == 'Sigo'){
+						if ($row[0] != 0 && $row[0] != $_SESSION['k_UserId']){
+							$selectname = mysql_query("SELECT loginName FROM member WHERE UserId = $row[0]");
+							$name = mysql_fetch_row($selectname);
+							echo "
+								<div class='drag friends'>".$name[0]."<a href=stop.php?id=$row[0]&grupo=$grup>x</a>
+								</div>";
+						}
+					}
+					else{
+							if ($row[0] != 0 && $row[0] != $_SESSION['k_UserId']){
+								$selectname = mysql_query("SELECT loginName FROM member WHERE UserId = $row[0]");
+								$name = mysql_fetch_row($selectname);
+								echo "
+									<div class='drag friends'>".$name[0]."</div>";		
+						}
+					}	
+				}
+				echo "	</div>";
 			}
-			echo "	</div>";
 			$i++;
 		}
 		echo "</section>";
@@ -401,6 +405,21 @@ if (isset($_SESSION['k_username'])) {
 			</form>
 			<button type="submit" id="SubmitEvent" class="drag" onClick="createevent()">Create Event</button>
 		</div>
+	<div id="miseventos">
+		<?php
+		$eventlist = mysql_query("SELECT * FROM eventos WHERE UserId = $id");
+		$len = mysql_num_fields($eventlist);
+		$i = 0;
+		while($i<=$len){
+			$evento = mysql_fetch_array($eventlist);
+			$user= $_SESSION['k_username'];
+			if($evento['UserId']!=0){
+				echo "<div id='evento' class='evento drag'>Mis eventos:<br><p>Dia:".$evento['event_date_expire']."<br>    Grupo: ".$evento['event_group']."<br><p>Descripcion:<br>".$evento['event_text']."</p></p></div>";
+			}
+			$i++;
+		}
+		?>	
+	</div>
 	<div id="ListaEventos">
 		<?php
 		$sigo = mysql_query("SELECT sigo FROM $tabla");
@@ -420,7 +439,6 @@ if (isset($_SESSION['k_username'])) {
 			}
 			$i++;
 		}
-		
 		?>
 	</div>
 	</div>
