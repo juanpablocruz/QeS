@@ -173,7 +173,7 @@ if (isset($_SESSION['k_username'])) {
 		<li><div><a id="logo"><div class="log drag"><img src="img/qed2.jpg" /></div></a></div></li>
 		<li><a href="#tabs-1">Home</a></li>
 		<li><a href="#tabs-2">Perfil</a></li>
-		<li><a href="#tabs-3">Amigos</a></li>
+		<li><a href="#tabs-3">Contactos</a></li>
 		<li><a href="#tabs-4">Eventos</a></li>
 		<li>
 			<a id="search">
@@ -188,7 +188,7 @@ if (isset($_SESSION['k_username'])) {
 	<div id="tabs-1" class="Page">
 		<div id="evento" class="drag">
 			Hoy...<br>
-			Mañana...<br>
+			Maï¿½ana...<br>
 			Pasado...<br>
 			<a href="logout.php">Logout</a><br>
 		</div>

@@ -3,9 +3,10 @@
 LLamad a la funcion que querais dependiendo del estado de la base de datos.
 */
 include_once "connect.php";
+
+function login(){
 $member = mysql_query("CREATE TABLE member(loginName varchar (20),password CHAR (255),createDate char(64),email char(64),phone CHAR (13), UserId int NOT NULL AUTO_INCREMENT, 
 PRIMARY KEY(UserId))");
-function login(){
 $login = mysql_query("CREATE TABLE login(loginName char(20),loginTime datetime)");
 }
 function images(){
