@@ -1,15 +1,8 @@
 <?php session_start();
-$user="root";
-$host="localhost";
-$password="";
-$database="qes";
+include_once "connect.php";
 
 $tabla = "tabla".$_SESSION['k_UserId'];
-		$connection = mysql_connect($host,$user,$password)
-			or die ("couldn’t connect to server");
-		$db = mysql_select_db($database,$connection)
-			or die ("Couldn’t select database");
-		$id = $_GET['id'];
+$id = $_GET['id'];
 $mid = $_SESSION['k_UserId'];
 $grupo =$_GET['grupo'];
 $id = preg_replace("/[^a-zA-Z0-9]/", "", $id);
