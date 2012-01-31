@@ -70,5 +70,17 @@ git codes:
 	git status 
 	
 	git push origin branchname (para subir el codigo, luego desde juanpablocruz/QeS.qit >> Pull request juanpablocruz @ branchname)
-	
++-------------------------------------------------+
+TO DO:
+
+-Reparar stop.php no deja de seguir bien.
+-Añadir busqueda al input de Buscar bajo la interaccion de Intro.
+-Añadir sistema de privacidad a grupos.
+-Reeditar sistema de eventos.
+-Establecer imagen de perfil por defecto.
+-Mejorar interfaz de perfil.
+-Sistema de mensajes.
+-Exclusion de miembros en Seleccion de grupo en Creacion de eventos.
+-Diseño de interfaz de grupos, seccion contactos.
+-Añadir "Cerrar cuenta".
 
