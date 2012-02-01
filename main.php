@@ -22,12 +22,13 @@ if (isset($_SESSION['k_username'])) {
 <html>
 	<head>
 		<title>QeS</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<link rel="stylesheet" href="css/style.css" />
 		<link rel="stylesheet" href="css/jquery-ui-1.8.17.custom.css" />
 		<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
 		<script type="text/javascript" src="js/jquery-ui-1.8.17.custom.min.js"></script>
 		<script>
+
 			function edit(){
 				$('.perfil_val').css('border','solid');
 				$('.perfil_val').css('border-width','1px');
@@ -294,14 +295,17 @@ if (isset($_SESSION['k_username'])) {
 					
 				}
 				$qry = mysql_query("SELECT $grup FROM $tabla");
+				$j = 1;
+				$k = 1;
 				while ($row = mysql_fetch_row($qry)){
 					if ($grup == 'Sigo'){
 						if ($row[0] != 0 && $row[0] != $_SESSION['k_UserId']){
 							$selectname = mysql_query("SELECT loginName FROM member WHERE UserId = $row[0]");
 							$name = mysql_fetch_row($selectname);
 							echo "
-								<div class='drag friends'>".$name[0]."<a href=stop.php?id=$row[0]&grupo=$grup>x</a>
+								<div class='drag friends' id='".$grup.$j."'>".$name[0]."<a href=stop.php?id=$row[0]&grupo=$grup>x</a>
 								</div>";
+							$j++;
 						}
 					}
 					else{
@@ -309,7 +313,8 @@ if (isset($_SESSION['k_username'])) {
 								$selectname = mysql_query("SELECT loginName FROM member WHERE UserId = $row[0]");
 								$name = mysql_fetch_row($selectname);
 								echo "
-									<div class='drag friends'>".$name[0]."</div>";		
+									<div class='drag friends ".$grup.$k."'>".$name[0]."</div>";	
+							$k++;									
 						}
 					}	
 				}
@@ -413,8 +418,9 @@ if (isset($_SESSION['k_username'])) {
 		while($i<=$len){
 			$evento = mysql_fetch_array($eventlist);
 			$user= $_SESSION['k_username'];
+			$idevent = $evento['EventId'];
 			if($evento['UserId']!=0){
-				echo "<div id='evento' class='evento drag'>Mis eventos:<br><p>Dia:".$evento['event_date_expire']."<br>    Grupo: ".$evento['event_group']."<br><p>Descripcion:<br>".$evento['event_text']."</p></p></div>";
+				echo "<div id='evento' class='evento drag'>Mis eventos:<br><p>Dia:".$evento['event_date_expire']."<br>    Grupo: ".$evento['event_group']."<br><p>Descripcion:<br>".$evento['event_text']."</p></p><a href='deletevent.php?id=".$idevent."'>Borrar evento</a></div>";
 			}
 			$i++;
 		}
