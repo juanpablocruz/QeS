@@ -18,6 +18,6 @@ while($arry = mysql_fetch_array($query)){
 			}
 		}
 	$delevent = mysql_query("DELETE FROM eventos WHERE EventId = '$idsevent' ");
-}
+
 
 ?>
