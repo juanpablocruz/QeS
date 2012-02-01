@@ -420,7 +420,9 @@ if (isset($_SESSION['k_username'])) {
 			$user= $_SESSION['k_username'];
 			$idevent = $evento['EventId'];
 			if($evento['UserId']!=0){
-				echo "<div id='evento' class='evento drag'>Mis eventos:<br><p>Dia:".$evento['event_date_expire']."<br>    Grupo: ".$evento['event_group']."<br><p>Descripcion:<br>".$evento['event_text']."</p></p><a href='deletevent.php?id=".$idevent."'>Borrar evento</a></div>";
+				echo "<div id='evento' class='evento drag'>Mis eventos:<br><p>Dia:".$evento['event_date_expire']."<br>
+					 Grupo: ".$evento['event_group']."<br><p>Descripcion:<br>".$evento['event_text']."</p>
+					 </p><a href='deletevent.php?id=".$idevent."'>Borrar evento</a></div>";
 			}
 			$i++;
 		}
@@ -440,7 +442,9 @@ if (isset($_SESSION['k_username'])) {
 				$query = mysql_query("SELECT * FROM member WHERE UserId = '$idcreator'");
 				$user= mysql_fetch_array($query);
 				if ($lista['UserId'] !=0){
-					echo "<div id='evento' class='evento drag'><p>Creador: ".$user['loginName']."<br>    Grupo: ".$lista['event_group']." Fecha: ".$lista['event_date_expire']."<br><p>Descripcion:<br>".$lista['event_text']."</p></p></div>";
+					echo "<div id='evento' class='evento drag'><p>Creador: ".$user['loginName']."<br>
+					Grupo: ".$lista['event_group']." Fecha: ".$lista['event_date_expire']."<br>
+					<p>Descripcion:<br>".$lista['event_text']."</p></p></div>";
 				}
 			}
 			$i++;
