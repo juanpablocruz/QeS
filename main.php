@@ -188,10 +188,51 @@ if (isset($_SESSION['k_username'])) {
 	</ul>
 	<div id="tabs-1" class="Page">
 		<div id="evento" class="drag">
-			Hoy...<br>
-			Mañana...<br>
-			Pasado...<br>
-			<a href="logout.php">Logout</a><br>
+		<a href="logout.php">Logout</a><br>
+		Eventos próximos:<br>
+		<?php
+		$eventqry = mysql_query("SELECT eventos FROM $tabla");
+		$eventnmbr = mysql_num_rows($eventqry);
+		$i=0;
+		while($i<$eventnmbr){
+			$evento = mysql_fetch_row($eventqry);
+			if ($evento[0] != 0){
+				$idento =$evento[0];
+				$qry = mysql_query("SELECT * FROM eventos WHERE EventId = '$idento'");
+				$datetime = new DateTime;
+				$datecreate = $datetime->format('Y-m-d');
+				$evnt = mysql_fetch_array($qry);
+				$dia = $evnt['event_date_expire'];
+				$date = explode(" ", $dia);
+				$gethora = explode(":", $date[1]);
+				$hora = $gethora[0].":".$gethora[1];
+				if($datecreate == $date[0]){
+					echo "Hoy: ".$evnt['Event_Title']." a las ".$hora."<br>";
+				}
+				$day = explode("-",$datecreate);
+				if ($day[2] < 10){
+					$eldia = ($day[0]."-".$day[1]."-0".($day[2]+1));
+					}
+				else{
+					$eldia = ($day[0]."-".$day[1]."-".($day[2]+1));
+				}
+				if($eldia == $date[0]){
+					echo "Tomorrow: ".$evnt['Event_Title']." a las ".$hora."<br>";
+				}
+				if ($day[2] < 10){
+					$eldia = ($day[0]."-".$day[1]."-0".($day[2]+2));
+					}
+				else{
+					$eldia = ($day[0]."-".$day[1]."-".($day[2]+2));
+				}
+				if($eldia == $date[0]){
+					echo "Pasado: ".$evnt['Event_Title']." a las ".$hora."<br>";
+				}
+			}
+			$i++;
+		}
+		?>
+			
 		</div>
 		<div id="tablon" >
 			<p>Novedades</p>
@@ -383,6 +424,7 @@ if (isset($_SESSION['k_username'])) {
 				<span id="Hour"><input type="text" class="inline drag" tabindex="3" name="time" id="EventHora" onclick="loadhora()"></div></span>
 				<div id="horas"></div>
 				<div id="EventInfo" name="EventDescription" class="drag">
+					<input type=text name="Event_Title" placeholder="Title"/>
 					<textarea id="textarea" rows="1" cols="1" placeholder="Description" class="drag" name="evntDescript"></textarea>
 				</div>
 				<div id="CreationGroups" name="GroupList" class="drag">
@@ -394,7 +436,7 @@ if (isset($_SESSION['k_username'])) {
 						$len = mysql_num_fields($result);
 						while ($i<$len){
 							$grup= mysql_field_name($result,$i);
-							if ($grup!='Sigo'){
+							if ($grup!='Sigo' && $grup != 'eventos'){
 								echo "<li><div class='MiembroGrupo'>".$grup."</div></li>";}
 							$i++;
 						}
@@ -420,7 +462,7 @@ if (isset($_SESSION['k_username'])) {
 			$user= $_SESSION['k_username'];
 			$idevent = $evento['EventId'];
 			if($evento['UserId']!=0){
-				echo "<div id='evento' class='evento drag'>Mis eventos:<br><p>Dia:".$evento['event_date_expire']."<br>
+				echo "<div id='evento' class='evento drag'>Mis eventos:<p>".$evento['Event_Title']."</p><br><p>Dia:".$evento['event_date_expire']."<br>
 					 Grupo: ".$evento['event_group']."<br><p>Descripcion:<br>".$evento['event_text']."</p>
 					 </p><a href='deletevent.php?id=".$idevent."'>Borrar evento</a></div>";
 			}
@@ -442,7 +484,7 @@ if (isset($_SESSION['k_username'])) {
 				$query = mysql_query("SELECT * FROM member WHERE UserId = '$idcreator'");
 				$user= mysql_fetch_array($query);
 				if ($lista['UserId'] !=0){
-					echo "<div id='evento' class='evento drag'><p>Creador: ".$user['loginName']."<br>
+					echo "<div id='evento' class='evento drag'><p>".$lista['Event_Title']."</p><p>Creador: ".$user['loginName']." <img src=view.php?id='".$user['UserId']."'><br>
 					Grupo: ".$lista['event_group']." Fecha: ".$lista['event_date_expire']."<br>
 					<p>Descripcion:<br>".$lista['event_text']."</p></p></div>";
 				}
