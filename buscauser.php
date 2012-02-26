@@ -2,15 +2,7 @@
 class Usuarios
 {
     public function  __construct() {
-$user="root";
-$host="localhost";
-$password="";
-$database="qes";
-		$connection = mysql_connect($host,$user,$password)
-			or die ("couldn’t connect to server");
-		$db = mysql_select_db($database,$connection)
-			or die ("Couldn’t select database");
-    }
+	include_once "connect.php";    }
 
     public function buscarUsuario($nombreUsuario){
         $datos = array();

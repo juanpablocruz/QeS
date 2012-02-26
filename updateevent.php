@@ -6,6 +6,7 @@ $query = mysql_query("SELECT * FROM eventos WHERE event_date_expire LIKE '%$date
 while($arry = mysql_fetch_array($query)){
 	$eventgroup=$arry['event_group'];
 	$idsevent = $arry['EventId'];
+	echo $idsevent;
 	$idcreat = $arry['UserId'];
 	$tabla = 'tabla'.$idcreat;
 	$groupmmbr = mysql_query("SELECT $eventgroup FROM $tabla");

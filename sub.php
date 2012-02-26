@@ -27,7 +27,10 @@ $checkres = mysql_query($chck)
 	$row= mysql_fetch_row($res);
 	$id = $row[5];
 	$table = "tabla".$id[0];
-	$query2 = mysql_query("CREATE TABLE $table(eventos int(20),Sigo CHAR (20),Abierto CHAR (20))");
+	$grupos = "grupos".$id[0];
+	$querytable = mysql_query("CREATE TABLE $table(eventos CHAR(20),Sigo CHAR (20),Abierto INT(1))");
+	$querygrupos = mysql_query("CREATE TABLE $grupos(name CHAR(20),privacidad CHAR(20))");
+	$fillgroup = mysql_query("INSERT INTO $grupos(name, privacidad) VALUES('Abierto','0')");
   			echo
 			"<SCRIPT LANGUAGE='javascript'>
 			 location.href = 'index.html';
