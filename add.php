@@ -19,9 +19,9 @@ $tabla = "tabla".$_SESSION['k_UserId'];
 			if($checkrow2[0] != $id){
 				$qry = mysql_query("INSERT INTO $tabla (sigo)
 									VALUES ($id)");
-				}
+				
 				$seguir = mysql_query("INSERT INTO $tablasuya ($grupo)
-							VALUES ($mid)");
+							VALUES ($mid)");}
 				echo
 					"<SCRIPT LANGUAGE='javascript'>
 					 location.href = 'main.php';

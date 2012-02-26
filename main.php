@@ -369,7 +369,7 @@ if (isset($_SESSION['k_username'])) {
 							$selectname = mysql_query("SELECT loginName FROM member WHERE UserId = $row[0]");
 							$name = mysql_fetch_row($selectname);
 							echo "
-								<div class='drag friends' id='".$grup.$j."' onclick = viewperfi('".$name[0]."')>".$name[0]."<a href=stop.php?id=$row[0]&grupo=$grup>x</a>
+								<div class='drag friends' id='".$grup.$j."' onclick = viewperfi('".$name[0]."')>".$name[0]."<a href=stop.php?id=$row[0]>x</a>
 								</div>";
 							$j++;
 						}
