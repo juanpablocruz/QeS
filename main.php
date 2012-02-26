@@ -46,13 +46,13 @@ if (isset($_SESSION['k_username'])) {
 				location.href = 'editprofile.php'+'?name='+name+'&number='+number+'&email='+email;
 			}
 			function canceleditprof(){	
-				$("#canceleditprof").click(function(){
 					$('.perfil_val').css('border','none');
 					$('.perfil_val').attr('readonly','readonly');
 					$('#save').css('visibility','hidden');	
 					$('#canceleditprof').css('visibility','hidden');					
-				});
+
 				}
+				
 			$(function() {
 				$(".calendar").datepicker({dateFormat: 'yy/mm/dd'});
 			});
@@ -84,6 +84,11 @@ if (isset($_SESSION['k_username'])) {
 							}
 					});
 				});
+			function viewperfi(name){
+				$('#livesearch').load(
+					'perfil.php?name=' + name
+                 );
+			}
 			$(document).ready(function(){
 				$(".btn-slide").click(function(){
 				  $("#load_img").slideToggle("slow");
@@ -94,11 +99,9 @@ if (isset($_SESSION['k_username'])) {
 		</script>
 		<script type="text/javascript">
 			function canceleEvent(){	
-				$("#cancelEvent").click(function(){
-					$('#CreationForm').css('visibility','hidden');	
+					$('#CreationForm').css('display','none');	
 					$('#cancelEvent').css('visibility','hidden');
 					$("#NewEventButton").css("visibility","visible");					
-				});
 				}
 			function sethora(){
 				var now = new Date();
@@ -114,14 +117,25 @@ if (isset($_SESSION['k_username'])) {
 				ele.value = hora+":"+minute;
 			};
 			function loadhora(){
-				$('#horas').css('visibility','visible');
+				$('#horas').css('visibility','visible');				
 				var now = new Date();
 				var hora = now.getHours();
 				var cuadrohoras = document.getElementById("horas");
 				var i = 0;
-				while (hora+i < 24){
-					cuadrohoras.innerHTML += "<a href=javascript:void(0);>"+(hora+i)+":00</a><br>";
+				cuadrohoras.innerHTML = "";
+				while (i < hora){
+					if(i<10){
+					cuadrohoras.innerHTML += "<a href=javascript:void(0);>0"+(i)+":00</a><br>";
+					}
+					else{
+					cuadrohoras.innerHTML += "<a href=javascript:void(0);>"+(i)+":00</a><br>";
+					}
 					i++;
+				}
+				var j = 0;
+				while (hora+j < 24){
+					cuadrohoras.innerHTML += "<a href=javascript:void(0);>"+(hora+j)+":00</a><br>";
+					j++;
 				}
 			
 			}
@@ -132,6 +146,17 @@ if (isset($_SESSION['k_username'])) {
 					$("#NewEventButton").css("visibility","hidden");
 					$('#cancelEvent').css('visibility','visible');
 					sethora();
+				});
+			});
+			 $(function() {
+				$( "#EGroupList" ).selectable({
+					selected: function(event, ui) { 
+						var grupo = (ui.selected.innerHTML);
+						grupo = grupo.replace(/<.*?>/g,'');
+						$('#livesearch').load(
+							'groupedit.php?grupo=' + grupo
+						);
+					}
 				});
 			});
 			 $(function() {
@@ -171,7 +196,7 @@ if (isset($_SESSION['k_username'])) {
 
 <div id="tabs">
 	<ul>
-		<li><div><a id="logo"><div class="log drag"><img src="img/qed2.jpg" /></div></a></div></li>
+		<li><div><a id="logo"><div class="log"><img src="img/qed2.jpg" /></div></a></div></li>
 		<li><a href="#tabs-1">Home</a></li>
 		<li><a href="#tabs-2">Perfil</a></li>
 		<li><a href="#tabs-3">Contactos</a></li>
@@ -187,7 +212,7 @@ if (isset($_SESSION['k_username'])) {
 		<li><p id="lg">conectado como <?php echo '<b>'.$_SESSION['k_username'].'</b>.';?></p></li>
 	</ul>
 	<div id="tabs-1" class="Page">
-		<div id="evento" class="drag">
+		<div id="evento">
 		<a href="logout.php">Logout</a><br>
 		Eventos próximos:<br>
 		<?php
@@ -238,27 +263,27 @@ if (isset($_SESSION['k_username'])) {
 			<p>Novedades</p>
 			<ul id="mensajes" style="list-style:none;">
 				<li>
-					<div class="post drag back first">
+					<div class="post back first">
 						<div class="imag"><img src="img/contact.png" /></div>
 						<div class="content">#1</div>
 					</div>
 				</li>
 				<li>
-					<div class="post drag mainpost">
+					<div class="post mainpost">
 						<div class="imag"><?php
 					echo"<img src='view.php?id=$id'>" ?></div>
 						<div class="content">#2</div>
 					</div>
 				</li>
 				<li>
-					<div class="post drag back second">
+					<div class="post back second">
 						<div class="imag"><img src="img/avatar.png" /></div>
 						<div class="content">#3</div>
 					</div>
 				</li>
 			</ul>
 		</div>
-		<div id="perf" class="drag">
+		<div id="perf">
 			<div id="perfi">
 				<?php 
 				echo "
@@ -285,21 +310,21 @@ if (isset($_SESSION['k_username'])) {
 				<div style="clear: both;"></div>
 			</div>
 			
-		<div id="calendar" class="drag" style="float:right;"></div>
+		<div id="calendar" style="float:right;"></div>
 		</div>
 		<div style="clear: both;"></div>
 	</div>
 	<div id="tabs-2" class="Page">
 		<p>Perfil</p>
-		<div id="even" class= "drag">
+		<div id="even">
 			<p id="canceleditprof" class="cancel" style="float:right" onClick=canceleditprof()>X</p>
 			<p>Nombre:<?php echo "<input name=perfilname id='perfil_val' class=perfil_val type=text readonly value='".$_SESSION['k_username']."' style='border:none'>";?></p>
-			<p>Numero movil:<?php echo "<input name=perfilnumber class=perfil_val type=text readonly value=".$_SESSION['k_phone']." style='border:none'>";?></p>
+			<p>Numero movil:<?php if($_SESSION['k_phone']!=''){echo "<input name=perfilnumber class=perfil_val type=text readonly value=".$_SESSION['k_phone']." style='border:none'>";}?></p>
 			<p>email:<?php echo "<input name=perfilemail class=perfil_val type=text readonly value=".$_SESSION['k_email']." style='border:none'>";?></p>
 			<button id=edit onClick=edit()>Edit</button><button id=save onClick=save() style="visibility:hidden">save</button>
 		</div>
 		
-		<div class="image drag"><?php echo"<img src='view.php?id=$id'>" ?></div>
+		<div class="image"><?php echo"<img src='view.php?id=$id'>" ?></div>
 		<div id="imgload">
 			<div id="load_img">
 			<form method="post" action="process.php" enctype="multipart/form-data">
@@ -344,7 +369,7 @@ if (isset($_SESSION['k_username'])) {
 							$selectname = mysql_query("SELECT loginName FROM member WHERE UserId = $row[0]");
 							$name = mysql_fetch_row($selectname);
 							echo "
-								<div class='drag friends' id='".$grup.$j."'>".$name[0]."<a href=stop.php?id=$row[0]&grupo=$grup>x</a>
+								<div class='drag friends' id='".$grup.$j."' onclick = viewperfi('".$name[0]."')>".$name[0]."<a href=stop.php?id=$row[0]&grupo=$grup>x</a>
 								</div>";
 							$j++;
 						}
@@ -354,7 +379,7 @@ if (isset($_SESSION['k_username'])) {
 								$selectname = mysql_query("SELECT loginName FROM member WHERE UserId = $row[0]");
 								$name = mysql_fetch_row($selectname);
 								echo "
-									<div class='drag friends ".$grup.$k."'>".$name[0]."</div>";	
+									<div class='drag friends ".$grup.$k."' onclick = viewperfi('".$name[0]."')>".$name[0]."</div>";	
 							$k++;									
 						}
 					}	
@@ -368,7 +393,7 @@ if (isset($_SESSION['k_username'])) {
 			<form method=post action='newgroup.php'><input type=text name='grupo' placeholder='New Group'><button id='newgroupbutton' type=submi>Create</button></form>
 			</aside>";
 	?>
-	<div id="livesearch" class=drag>
+	<div id="livesearch">
 		<?php
 			$mename=$_SESSION['k_username'];
 			$query = ("SELECT * FROM member WHERE loginName='$mename'");
@@ -397,7 +422,7 @@ if (isset($_SESSION['k_username'])) {
 						if ($row[0] != 0 && $row[0] != $_SESSION['k_UserId']){
 							$selectname = mysql_query("SELECT loginName FROM member WHERE UserId = $row[0]");
 							$name = mysql_fetch_row($selectname);
-							echo "<td>".$name[0]."</td>";
+							echo "<td><div onclick = viewperfi('".$name[0]."')>".$name[0]."</div></td>";
 						}	
 					}
 					echo "</tr>";
@@ -407,6 +432,22 @@ if (isset($_SESSION['k_username'])) {
 			echo "</table></div>";
 		?>
 	</div>
+		<div id="editgroups">
+			Edit Groups:
+			<?php
+				$result = mysql_query($qr);		
+				echo "<ul id='EGroupList' style='list-style:none;'>";
+				$i=0;
+				$len = mysql_num_fields($result);
+				while ($i<$len){
+					$grup= mysql_field_name($result,$i);
+					if ($grup!='Sigo' && $grup != 'eventos'){
+						echo "<li><div class='editgroup'>".$grup."</div></li>";}
+					$i++;
+				}
+				echo "</ul>";
+			?>
+		</div>
 	</div>
 	<div id="tabs-4" class="Page">
 	<p>Eventos</p>
@@ -419,15 +460,16 @@ if (isset($_SESSION['k_username'])) {
 				
 				<header style="padding-left:40%;">New Event</header>
 				
-				<div id="DateEvent"><input type="text" class="calendar drag" id="EventDay" placeholder="Date" name="date"/>
+				<div id="DateEvent"><input type="text" class="calendar" id="EventDay" placeholder="Date" name="date"/>
 				
-				<span id="Hour"><input type="text" class="inline drag" tabindex="3" name="time" id="EventHora" onclick="loadhora()"></div></span>
+				<span id="Hour"><input type="text" class="inline" tabindex="3" name="time" id="EventHora" onclick="loadhora()"></div></span>
 				<div id="horas"></div>
-				<div id="EventInfo" name="EventDescription" class="drag">
+				<div id="EventInfo" name="EventDescription">
 					<input type=text name="Event_Title" placeholder="Title"/>
-					<textarea id="textarea" rows="1" cols="1" placeholder="Description" class="drag" name="evntDescript"></textarea>
+					<textarea id="textarea" rows="1" cols="1" placeholder="Description" name="evntDescript"></textarea>
 				</div>
-				<div id="CreationGroups" name="GroupList" class="drag">
+				<div id="CreationGroups" name="GroupList"
+				>
 					Groups:
 					<?php
 						$result = mysql_query($qr);		
@@ -450,12 +492,12 @@ if (isset($_SESSION['k_username'])) {
 					<input type=hidden id="inputgrupo"/>
 				</div>
 			</form>
-			<button type="submit" id="SubmitEvent" class="drag" onClick="createevent()">Create Event</button>
+			<button type="submit" id="SubmitEvent" onClick="createevent()">Create Event</button>
 		</div>
 	<div id="miseventos">
 		<?php
 		$eventlist = mysql_query("SELECT * FROM eventos WHERE UserId = $id");
-		$len = mysql_num_fields($eventlist);
+		if ($len = mysql_num_fields($eventlist)){
 		$i = 0;
 		while($i<=$len){
 			$evento = mysql_fetch_array($eventlist);
@@ -468,12 +510,13 @@ if (isset($_SESSION['k_username'])) {
 			}
 			$i++;
 		}
+		}
 		?>	
 	</div>
 	<div id="ListaEventos">
 		<?php
 		$sigo = mysql_query("SELECT sigo FROM $tabla");
-		$len = mysql_num_fields($sigo);
+		if($len = mysql_num_fields($sigo)){
 		$i = 0;
 		while($i<=$len){
 			$seguido = mysql_fetch_row($sigo);
@@ -484,12 +527,13 @@ if (isset($_SESSION['k_username'])) {
 				$query = mysql_query("SELECT * FROM member WHERE UserId = '$idcreator'");
 				$user= mysql_fetch_array($query);
 				if ($lista['UserId'] !=0){
-					echo "<div id='evento' class='evento drag'><p>".$lista['Event_Title']."</p><p>Creador: ".$user['loginName']." <img src=view.php?id='".$user['UserId']."'><br>
+					echo "<div id='evento' class='evento'><p>".$lista['Event_Title']."</p><p>Creador: ".$user['loginName']." <img src=view.php?id='".$user['UserId']."'><br>
 					Grupo: ".$lista['event_group']." Fecha: ".$lista['event_date_expire']."<br>
 					<p>Descripcion:<br>".$lista['event_text']."</p></p></div>";
 				}
 			}
 			$i++;
+		}
 		}
 		?>
 	</div>

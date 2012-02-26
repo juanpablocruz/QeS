@@ -162,12 +162,7 @@ input.default {
 }
 #formulario{
 float:right;
-	-webkit-box-shadow:0 0 1px 1px #DDD;
-	-moz-box-shadow:0 0 1px 1px #DDD;
-	box-shadow:0 0 1px 1px #DDD;	
-		-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
+border:none;
 }
 #login{
 min-width:350px;

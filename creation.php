@@ -17,6 +17,8 @@ $events = mysql_query("CREATE TABLE events(UserId int(20),event_text longtext,ev
 PRIMARY KEY(EventId))");
 }
 //Llamad aqui las funciones
+login();
+images();
 events();
 
 echo "Succes";
