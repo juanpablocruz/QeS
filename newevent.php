@@ -1,5 +1,6 @@
 <?php session_start();
 include_once "connect.php";
+
 $hora =$_POST['hora'];
 $date =$_POST['dia'];
 $grupo=$_POST['grupo'];
@@ -25,13 +26,13 @@ $mitabla = 'tabla'.$id;
 $miembros = mysql_query("SELECT $grupo FROM $mitabla");
 $len = mysql_num_fields($miembros);
 
-$meinvito = mysql_query("INSERT INTO $mitabla (eventos) VALUES ('$eventoid')");
+$meinvito = mysql_query("INSERT INTO $mitabla (eventos) VALUES ('$eventkey')");
 $i=0;
 while($i<$len){
 	while($user = mysql_fetch_row($miembros)){
 		$persona = $user[0];
 		$sutabla = 'tabla'.$persona;
-		$invitado = mysql_query("INSERT INTO $sutabla (eventos) VALUES ('$eventoid')");
+		$invitado = mysql_query("INSERT INTO $sutabla (eventos) VALUES ('$eventkey')");
 	}
 	$i++;
 }
