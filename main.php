@@ -319,7 +319,8 @@ if (isset($_SESSION['k_username'])) {
 		<div id="even">
 			<p id="canceleditprof" class="cancel" style="float:right" onClick=canceleditprof()>X</p>
 			<p>Nombre:<?php echo "<input name=perfilname id='perfil_val' class=perfil_val type=text readonly value='".$_SESSION['k_username']."' style='border:none'>";?></p>
-			<p>Numero movil:<?php if($_SESSION['k_phone']!=''){echo "<input name=perfilnumber class=perfil_val type=text readonly value=".$_SESSION['k_phone']." style='border:none'>";}?></p>
+			<p>Numero movil: <?php if($_SESSION['k_phone']!=''){echo "<input name=perfilnumber class=perfil_val type=text readonly value=".$_SESSION['k_phone']." style='border:none'>";}
+									else{echo "<input name=perfilnumber class=perfil_val type=text readonly value='' style='border:none' placeholder='phone'>";}?></p>
 			<p>email:<?php echo "<input name=perfilemail class=perfil_val type=text readonly value=".$_SESSION['k_email']." style='border:none'>";?></p>
 			<button id=edit onClick=edit()>Edit</button><button id=save onClick=save() style="visibility:hidden">save</button>
 		</div>
@@ -366,20 +367,33 @@ if (isset($_SESSION['k_username'])) {
 				while ($row = mysql_fetch_row($qry)){
 					if ($grup == 'Sigo'){
 						if ($row[0] != 0 && $row[0] != $_SESSION['k_UserId']){
-							$selectname = mysql_query("SELECT loginName FROM member WHERE UserId = $row[0]");
+							$selectname = mysql_query("SELECT loginName,online FROM member WHERE UserId = $row[0]");
 							$name = mysql_fetch_row($selectname);
+							if ($name[1] == 0){
 							echo "
-								<div class='drag friends' id='".$grup.$j."' onclick = viewperfi('".$name[0]."')>".$name[0]."<a href=stop.php?id=$row[0]>x</a>
+								<div class='drag friends offline' id='".$grup.$j."' onclick = viewperfi('".$name[0]."')>".$name[0]."<a href=stop.php?id=$row[0]>x</a>
 								</div>";
+							}
+							if ($name[1] ==1){	
+							echo "
+								<div class='drag friends online' id='".$grup.$j."' onclick = viewperfi('".$name[0]."')>".$name[0]." <a href=stop.php?id=$row[0]>x</a>
+								</div>";							
+							}
 							$j++;
 						}
 					}
 					else{
 							if ($row[0] != 0 && $row[0] != $_SESSION['k_UserId']){
-								$selectname = mysql_query("SELECT loginName FROM member WHERE UserId = $row[0]");
+								$selectname = mysql_query("SELECT loginName,online FROM member WHERE UserId = $row[0]");
 								$name = mysql_fetch_row($selectname);
+								if ($name[1] == 0){
 								echo "
-									<div class='drag friends ".$grup.$k."' onclick = viewperfi('".$name[0]."')>".$name[0]."</div>";	
+									<div class='drag friends offline ".$grup.$k."' onclick = viewperfi('".$name[0]."')>".$name[0]."</div>";
+								}
+								if ($name[1] ==1){	
+								echo "
+									<div class='drag friends online ".$grup.$k."' onclick = viewperfi('".$name[0]."')>".$name[0]."</div>";
+								}
 							$k++;									
 						}
 					}	

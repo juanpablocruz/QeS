@@ -252,7 +252,7 @@ width:99%;
 	background:white;
 	cursor:pointer;
 	border:solid;
-	border-color:#F00;
+	
     -webkit-border-radius: 40px;
     -moz-border-radius: 40px;
     border-radius: 40px;
@@ -261,8 +261,18 @@ width:99%;
 	color:red;
 	padding:3px;
 }
-.friends:hover {
+.online {
+	border-color:#0F0;
+}
+.offline{
 	border-color:#F00;
+}
+.offline:hover {
+	border-color:#F00;
+	box-shadow: 2px 2px 5px #999
+}
+.online:hover {
+	border-color:#0F0;
 	box-shadow: 2px 2px 5px #999
 }
 .friends a{
