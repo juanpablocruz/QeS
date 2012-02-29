@@ -202,12 +202,6 @@ ul{
 font-size:12px;
 color:white;
 }
-#friend {
-	color:#F00;
-	width:30%;
-	position:relative;
-	float:left;
-}
 .friends{
 color:#fff;
 position:absolute;
@@ -252,7 +246,7 @@ width:99%;
 	background:white;
 	cursor:pointer;
 	border:solid;
-	border-color:#F00;
+	
     -webkit-border-radius: 40px;
     -moz-border-radius: 40px;
     border-radius: 40px;
@@ -261,8 +255,18 @@ width:99%;
 	color:red;
 	padding:3px;
 }
-.friends:hover {
+.online {
+	border-color:#0F0;
+}
+.offline{
 	border-color:#F00;
+}
+.offline:hover {
+	border-color:#F00;
+	box-shadow: 2px 2px 5px #999
+}
+.online:hover {
+	border-color:#0F0;
 	box-shadow: 2px 2px 5px #999
 }
 .friends a{
@@ -478,39 +482,6 @@ width:100%;
 .CF{
 	display: none;
 }
-#CreationGroups{
-	position:relative;
-	float:right;
-	border: solid 1px #d2d2d2;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	-webkit-box-shadow:inset 0 0 1px 1px #87CEFA;
-	-moz-box-shadow:inset 0 0 1px 1px #87CEFA;
-	box-shadow:inset 0 0 1px 1px #87CEFA;	
-	color:#333;
-	opacity:0.8;
-	max-width:300px;
-	min-width:200px;
-	width:auto;
-	min-height:80px;
-	height:auto;
-	margin:0;
-	margin-top:20px;
-	margin-right:20px;
-}
-#GroupList li{
-padding-left:20px;
-}
-.MiembroGrupo:hover{
-	background:#87CEFA;
-	cursor:pointer;
-	border: solid 1px #d2d2d2;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	opacity:0.7;
-}
 #CreationForm{
 	min-width:50%;
 	width:auto;	
@@ -532,7 +503,7 @@ padding-left:20px;
 	margin:0;
 	margin-right:20px;
 }
-#textarea{
+.textarea{
 	width:250px;
 	height: 120px;
 	border: 3px solid #cccccc;
@@ -561,15 +532,6 @@ padding-left:20px;
 	display: inline-block;
 	text-align: -webkit-auto;
 }
-#GroupList .ui-selecting { background:#87CEFA; }
-#GroupList .ui-selected { 
-	background:#87CEFA;
-	cursor:pointer;
-	border: solid 1px #d2d2d2;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-	opacity:0.7;}
 #DateEvent{
 	margin-bottom:15px;
 	position:relative;
@@ -627,8 +589,13 @@ float:left;
 	box-shadow:inset 0 0 1px 1px #87CEFA;	
 }
 #editgroups{
+position:relative;
+float:right;
+margin-right:15%;
+}
+.GroupsLis{
 	position:relative;
-	float:right;
+	float:left;
 	border: solid 1px #d2d2d2;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -645,9 +612,8 @@ float:left;
 	height:auto;
 	margin:0;
 	margin-top:20px;
-	margin-right:15%;
 }
-.editgroup:hover{
+.elementlist:hover{
 	background:#87CEFA;
 	cursor:pointer;
 	border: solid 1px #d2d2d2;
@@ -656,9 +622,12 @@ float:left;
 	border-radius: 5px;
 	opacity:0.7;
 }
-#EGroupList li{padding-left:20px;}
-#EGroupList .ui-selecting { background:#87CEFA; }
-#EGroupList .ui-selected { 
+.groupelement{
+list-style:none;
+}
+.groupelement li{padding-left:20px;}
+.groupelement .ui-selecting { background:#87CEFA; }
+.groupelement .ui-selected { 
 	background:#87CEFA;
 	cursor:pointer;
 	border: solid 1px #d2d2d2;
@@ -666,3 +635,67 @@ float:left;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 	opacity:0.7;}
+
+#formulaire{
+	border: solid 1px #d2d2d2;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow:inset 0 0 1px 1px #87CEFA;
+	-moz-box-shadow:inset 0 0 1px 1px #87CEFA;
+	box-shadow:inset 0 0 1px 1px #87CEFA;	
+}
+.formulaire{
+display:block;
+margin:10px;
+}
+#msg{
+position:absolute;
+margin-left:20%;
+}
+#Message{
+position:relative;
+float:left;
+}
+#FriendsList{
+position:relative;
+float:right;
+}
+#descriptiontext{
+width:400px;
+}
+#subject{
+}
+#tolist{
+position:absolute;
+right:5%;
+top:5%;
+}
+.friend{
+margin-left:5%;
+	border: solid 1px #d2d2d2;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow:inset 0 0 1px 1px #87CEFA;
+	-moz-box-shadow:inset 0 0 1px 1px #87CEFA;
+	box-shadow:inset 0 0 1px 1px #87CEFA;	
+}
+#mensajestabla{
+	border: solid 1px #d2d2d2;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow:inset 0 0 1px 1px #87CEFA;
+	-moz-box-shadow:inset 0 0 1px 1px #87CEFA;
+	box-shadow:inset 0 0 1px 1px #87CEFA;	
+}
+#mensajestabla td{
+border: solid 1px #d2d2FF;
+}
+#mensajestabla tr{
+cursor:pointer;
+}
+#mensajestabla tr:hover{
+background:#EEE;
+}
