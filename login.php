@@ -34,6 +34,9 @@ $checkres = mysql_query($chck)
 				VALUES ('$nombre','$time')";
 			$result = mysql_query($query)
 				or die ("Couldn’t execute query.");
+				$name = $row['loginName'];
+				
+			$status = mysql_query("UPDATE member SET online = 1 WHERE loginName = '$name'");
 			$_SESSION["k_username"] = $row['loginName'];
 			$_SESSION["k_email"] = $row['email'];
 			$_SESSION["k_phone"] = $row['phone'];
