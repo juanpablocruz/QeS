@@ -9,6 +9,7 @@ if (isset($_SESSION['k_username'])) {
 		}
 		include_once "connect.php";
 		$tabla = "tabla".$_SESSION['k_UserId'];
+		$_SESSION['k_tabla']=$tabla;
 		$id = $_SESSION['k_UserId'];
 		$query = mysql_query("SELECT * FROM member WHERE UserId = '$id'");
 		$firstrow = mysql_fetch_array($query);
@@ -160,6 +161,27 @@ if (isset($_SESSION['k_username'])) {
 				});
 			});
 			 $(function() {
+				$( "#ToLists" ).selectable({
+					selected: function(event, ui) { 
+						var friend = (ui.selected.innerHTML);
+						friend = friend.replace(/<.*?>/g,'');
+						alert(friend);
+						
+					}
+				});
+			});
+			 $(function() {
+				$( "#MGroupList" ).selectable({
+					selected: function(event, ui) { 
+						var grupo = (ui.selected.innerHTML);
+						grupo = grupo.replace(/<.*?>/g,'');
+						$('#Message').load(
+							'messages.php?grupo=' + grupo
+						);
+					}
+				});
+			});
+			 $(function() {
 				$( "#GroupList" ).selectable({
 					selected: function(event, ui) { 
 						var grupo = (ui.selected.innerHTML);
@@ -189,6 +211,26 @@ if (isset($_SESSION['k_username'])) {
 					inputg.setAttribute("value", groupto);
 					document.getElementById("FormularioEvento").submit();
 				};
+			function newmssg(friend){
+				$('#Message').load(
+							'newmessage.php?to='+friend
+						);
+			}
+			function ShowFriends(){
+				$('#Message').load(
+							'friendlist.php'
+				);
+			}
+function viewmessage(from,to,subject,date,descripcion,answered,viewed){
+			from=from.replace("/+./"," ");
+			to=to.replace("/+./"," ");
+			subject=subject.replace("/+./"," ");
+			date=date.replace("/+./"," ");
+			descripcion=descripcion.replace("/+./"," ");
+			from=from.replace("/+./"," ");
+			var string = 'From:'+from+' To:'+to+' Subject:'+subject+' '+date+'\n'+descripcion;
+			alert(string);
+			}
 		</script>
 	</head>
 
@@ -201,6 +243,7 @@ if (isset($_SESSION['k_username'])) {
 		<li><a href="#tabs-2">Perfil</a></li>
 		<li><a href="#tabs-3">Contactos</a></li>
 		<li><a href="#tabs-4">Eventos</a></li>
+		<li><a href="#tabs-5">Mensajes</a></li>
 		<li>
 			<a id="search">
 			<form class="searchform">
@@ -209,7 +252,7 @@ if (isset($_SESSION['k_username'])) {
 			</a>
 		</li>
 		<li><div style="width:5cm"></div></li>
-		<li><p id="lg">conectado como <?php echo '<b>'.$_SESSION['k_username'].'</b>.';?></p></li>
+		<li><p id="lg">logged as <?php echo '<b>'.$_SESSION['k_username'].'</b>.';?></p></li>
 	</ul>
 	<div id="tabs-1" class="Page">
 		<div id="evento">
@@ -341,7 +384,7 @@ if (isset($_SESSION['k_username'])) {
 	<div id="tabs-3" class="Page">
 	<p>friends</p>
 	<?php
-		echo "<section id=friend;>";
+		echo "<section id=friend>";
 		$query = ("SELECT * FROM $tabla");
 		$result = mysql_query($query);		
 		$i=0;
@@ -418,7 +461,6 @@ if (isset($_SESSION['k_username'])) {
 			echo $row['loginName']."<br>".$row['email']."<br>";
 			$seguir = $row['UserId'];
 			$tabla = "tabla".$row['UserId'];
-			$gr = mysql_query("SELECT * FROM $tabla");
 			$qr = ("SELECT * FROM $tabla");
 			$result = mysql_query($qr);		
 			echo "<table cellspacing='0' cellpadding='2'>";
@@ -446,17 +488,17 @@ if (isset($_SESSION['k_username'])) {
 			echo "</table></div>";
 		?>
 	</div>
-		<div id="editgroups">
+		<div id="editgroups" class="GroupsLis">
 			Edit Groups:
 			<?php
 				$result = mysql_query($qr);		
-				echo "<ul id='EGroupList' style='list-style:none;'>";
+				echo "<ul id='EGroupList' class='groupelement' style='list-style:none;'>";
 				$i=0;
 				$len = mysql_num_fields($result);
 				while ($i<$len){
 					$grup= mysql_field_name($result,$i);
 					if ($grup!='Sigo' && $grup != 'eventos'){
-						echo "<li><div class='editgroup'>".$grup."</div></li>";}
+						echo "<li><div class='editgroup elementlist'>".$grup."</div></li>";}
 					$i++;
 				}
 				echo "</ul>";
@@ -480,20 +522,20 @@ if (isset($_SESSION['k_username'])) {
 				<div id="horas"></div>
 				<div id="EventInfo" name="EventDescription">
 					<input type=text name="Event_Title" placeholder="Title"/>
-					<textarea id="textarea" rows="1" cols="1" placeholder="Description" name="evntDescript"></textarea>
+					<textarea class="textarea" rows="1" cols="1" placeholder="Description" name="evntDescript"></textarea>
 				</div>
-				<div id="CreationGroups" name="GroupList"
+				<div id="CreationGroups" class="GroupsLis" name="GroupList"
 				>
 					Groups:
 					<?php
 						$result = mysql_query($qr);		
-						echo "<ul id='GroupList' style='list-style:none;'>";
+						echo "<ul id='GroupList' class='groupelement' style='list-style:none;'>";
 						$i=0;
 						$len = mysql_num_fields($result);
 						while ($i<$len){
 							$grup= mysql_field_name($result,$i);
 							if ($grup!='Sigo' && $grup != 'eventos'){
-								echo "<li><div class='MiembroGrupo'>".$grup."</div></li>";}
+								echo "<li><div class='elementlist'>".$grup."</div></li>";}
 							$i++;
 						}
 						echo "</ul>";
@@ -551,6 +593,35 @@ if (isset($_SESSION['k_username'])) {
 		}
 		?>
 	</div>
+	</div>
+	<div id="tabs-5" class="Page">
+			<div id="CrearMsg">
+			<button id="newmssg" onclick="ShowFriends()">New Message</button>
+			</div>
+			<div id="MssgGroups" class="GroupsLis">
+			<?php
+				$result = mysql_query($qr);		
+				echo "<ul id='MGroupList' class='groupelement'>";
+				$i=0;
+				$len = mysql_num_fields($result);
+				while ($i<$len){
+					$grup= mysql_field_name($result,$i);
+					if ($grup!='Sigo' && $grup != 'eventos'){
+						echo "<li><div class='mssggroup elementlist'>".$grup."</div></li>";}
+					$i++;
+				}
+				echo "<li><div class='mssggroup elementlist'>Desconocidos</div></li>";
+				echo "</ul>";
+			?>
+		</div>
+		<div id="msg">
+		<div id="Message">
+		<div id="ElMensaje">
+		</div>
+		</div>
+		<div id="FriendsList">
+		</div>
+		</div>
 	</div>
 	</body>
 </html>
