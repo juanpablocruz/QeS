@@ -27,8 +27,10 @@ $checkres = mysql_query($chck)
 	$row= mysql_fetch_row($res);
 	$id = $row[5];
 	$table = "tabla".$id[0];
+	$mesages = "messages".$id[0];
 	$grupos = "grupos".$id[0];
 	$querytable = mysql_query("CREATE TABLE $table(eventos CHAR(20),Sigo CHAR (20),Abierto INT(1))");
+	$querytable = mysql_query("CREATE TABLE $mesages(From CHAR(25),To CHAR (25),From_Date DATETIME,Subject TEXT,Message_txt MEDIUMTEXT,Mssg_Key CHAR(20),Answered CHAR(20),Viewed TINYINT(1))");
 	$querygrupos = mysql_query("CREATE TABLE $grupos(name CHAR(20),privacidad CHAR(20))");
 	$fillgroup = mysql_query("INSERT INTO $grupos(name, privacidad) VALUES('Abierto','0')");
   			echo
