@@ -13,7 +13,7 @@ function images(){
 $images = mysql_query("CREATE TABLE images(UserId int(20),filename varchar(255),mime_type varchar(255),file_size int(11),file_data longblob)");
 }
 function events(){
-$events = mysql_query("CREATE TABLE events(UserId int(20),event_text longtext,event_group varchar(25),event_date_creation datetime,event_date_expire datetime,event_tags varchar(255),Exclusiones int(150),EventId int NOT NULL AUTO_INCREMENT, 
+$events = mysql_query("CREATE TABLE eventos(UserId int(20),event_text longtext,event_group varchar(25),event_date_creation datetime,event_date_expire datetime,event_tags varchar(255),Exclusiones int(150),EventId int NOT NULL AUTO_INCREMENT, 
 PRIMARY KEY(EventId))");
 }
 //Llamad aqui las funciones
